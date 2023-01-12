@@ -1,5 +1,6 @@
 package com.rushional.articles_task.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -12,6 +13,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@JsonIgnoreProperties({"articlesList"})
 public class AppUser {
 
     public AppUser() {}
@@ -27,5 +29,5 @@ public class AppUser {
     private String name;
 
     @OneToMany(mappedBy = "appUser")
-    List<Article> matchesList;
+    List<Article> articlesList;
 }

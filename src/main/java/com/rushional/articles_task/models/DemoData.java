@@ -26,12 +26,6 @@ public void appReady(ApplicationReadyEvent event) {
         AppUser appUserBob = new AppUser("Bob");
         userRepository.save(appUserBob);
 
-//        Article article1 = new Article();
-//        articleRepository.save(article1);
-//        article1.setTitle("On the nature of assessment tests");
-//        article1.setAppUser(appUserAlice);
-//        article1.setContent("I don't like them!");
-//        article1.setPostDate(LocalDateTime.now());
         Article article1 = new Article(
             "On the nature of assessment tests",
             appUserAlice,
