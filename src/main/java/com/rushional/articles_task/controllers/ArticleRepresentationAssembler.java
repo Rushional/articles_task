@@ -11,11 +11,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 public class ArticleRepresentationAssembler implements RepresentationModelAssembler<Article, EntityModel<Article>> {
     @Override
-    public EntityModel<Article> toModel(Article card) {
+    public EntityModel<Article> toModel(Article article) {
 
-        return EntityModel.of(card, //
-            linkTo(methodOn(ArticleController.class).one(card.getId())).withSelfRel(),
-            linkTo(methodOn(ArticleController.class).all()).withRel("cards"));
+        return EntityModel.of(article, //
+            linkTo(methodOn(ArticleController.class).one(article.getId())).withSelfRel());
     }
 
 }
