@@ -1,10 +1,8 @@
 package com.rushional.articles_task.models.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -31,6 +29,8 @@ public class Article {
     private Long id;
 
     @NotNull
+    @Column(length = 100)
+    @Size(max = 100)
     private String title;
 
     @ManyToOne
