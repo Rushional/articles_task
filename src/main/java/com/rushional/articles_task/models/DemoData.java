@@ -20,7 +20,7 @@ public class DemoData {
     private ArticleRepository articleRepository;
 
     @EventListener
-public void appReady(ApplicationReadyEvent event) {
+    public void appReady(ApplicationReadyEvent event) {
         AppUser appUserAlice = new AppUser("Alice");
         userRepository.save(appUserAlice);
         AppUser appUserBob = new AppUser("Bob");

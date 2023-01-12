@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,8 +27,9 @@ public class AppUser {
     @GeneratedValue
     private Long id;
 
+    @NotNull
     private String name;
 
-    @OneToMany(mappedBy = "appUser")
+    @OneToMany(mappedBy = "author")
     List<Article> articlesList;
 }
