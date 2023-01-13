@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
 @Getter
@@ -17,7 +17,7 @@ public class Article {
 
     public Article() {}
 
-    public Article(String title, AppUser author, String content, LocalDateTime postDate) {
+    public Article(String title, AppUser author, String content, ZonedDateTime postDate) {
         this.title = title;
         this.author = author;
         this.content = content;
@@ -42,5 +42,7 @@ public class Article {
     private String content;
 
     @NotNull
-    private LocalDateTime postDate;
+    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    //By default Hibernate maps ZonedDateTime to TS w/out TZ, which is just plain wrong, hence the @Column annotation
+    private ZonedDateTime postDate;
 }
