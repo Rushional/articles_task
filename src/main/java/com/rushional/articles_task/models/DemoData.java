@@ -22,9 +22,9 @@ public class DemoData {
 
     @EventListener
     public void appReady(ApplicationReadyEvent event) {
-        AppUser appUserAlice = new AppUser("Alice");
+        AppUser appUserAlice = new AppUser("Alice", "$2a$08$h2d3z4Gt5v/kxPDt7HEv6uJljfpJs0dvW10RaaG4K4/uCVtKUMNYO", "USER");
         userRepository.save(appUserAlice);
-        AppUser appUserBob = new AppUser("Bob");
+        AppUser appUserBob = new AppUser("Bob", "$2a$08$8OmRBHdOps991FnF2ApWPeuJdwsRimcBvjiE2Q1OgYd5KxCSNNhfq", "ADMIN");
         userRepository.save(appUserBob);
 
         Article article1 = new Article(

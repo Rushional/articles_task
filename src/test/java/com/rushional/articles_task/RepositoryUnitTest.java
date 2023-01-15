@@ -45,8 +45,8 @@ public class RepositoryUnitTest {
     @Autowired
     private UserRepository userRepository;
 
-    private AppUser testUser1 = new AppUser("Just your average user");
-    private AppUser testUser2 = new AppUser("This user has a dark secret");
+    private AppUser testUser1 = new AppUser("Just your average user", "Average password", "USER");
+    private AppUser testUser2 = new AppUser("This user has a dark secret", "Dark secret", "ADMIN");
 
     @BeforeEach
     void init(){
