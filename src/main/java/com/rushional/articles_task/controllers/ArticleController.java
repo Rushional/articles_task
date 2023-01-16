@@ -1,6 +1,7 @@
 package com.rushional.articles_task.controllers;
 
 import com.rushional.articles_task.controllers.exceptions.ArticleNotFoundException;
+import com.rushional.articles_task.models.DailyArticlesCountRow;
 import com.rushional.articles_task.models.entities.Article;
 import com.rushional.articles_task.models.repositories.ArticleRepository;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,8 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class ArticleController {
@@ -50,5 +53,11 @@ public class ArticleController {
         return ResponseEntity //
             .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
             .body(entityModel);
+    }
+
+    @GetMapping("/posts_counts")
+    @ResponseBody
+    public List<DailyArticlesCountRow> postCounts() {
+        return repository.getDailyPostCountsForPastWeek();
     }
 }
