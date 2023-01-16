@@ -1,5 +1,6 @@
 package com.rushional.articles_task;
 
+import com.rushional.articles_task.models.DailyArticlesCountRow;
 import com.rushional.articles_task.models.entities.AppUser;
 import com.rushional.articles_task.models.entities.Article;
 import com.rushional.articles_task.models.entities.Role;
@@ -18,6 +19,8 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +85,7 @@ public class RepositoryUnitTest {
     }
 
     @Test
-    void addingNormalArticles() {
+    void addingNormalArticlesShouldSucceed() {
         articleRepository.saveAndFlush(new Article(
             "Just your average article",
             admin1,
@@ -134,5 +137,68 @@ public class RepositoryUnitTest {
             "I sure hope I didn't overdo it with the fancy title!",
             ZonedDateTime.now())
         ));
+    }
+
+    @Test
+    void dailyCountsShouldReturnCorrectValues() {
+        articleRepository.saveAndFlush(new Article(
+            "Last week's article",
+            admin1,
+            "Content of the article. Something about ants going in circles, not being able to stop. Looks cool, but kinda creepy",
+            ZonedDateTime.now().minusDays(7))
+        );
+
+        articleRepository.saveAndFlush(new Article(
+            "First article today",
+            user1,
+            "Contents gonna be content",
+            ZonedDateTime.now())
+        );
+
+        articleRepository.saveAndFlush(new Article(
+            "2nd Article today",
+            admin1,
+            "I'm out of cool stuff to say",
+            ZonedDateTime.now())
+        );
+
+        articleRepository.saveAndFlush(new Article(
+            "An article yesterday!",
+            user1,
+            "But I do believe all the other stuff I was saying was indeed cool! " +
+                "It was nice having such a great audience! See you later when you totally hire me",
+            ZonedDateTime.now().minusDays(1))
+        );
+
+        List<DailyArticlesCountRow> dailyCounts = articleRepository.getDailyPostCountsForPastWeek();
+
+        assertEquals(2, dailyCounts.size());
+        // Only one post yesterday
+        assertEquals(1, dailyCounts.get(0).getArticlesAmount());
+        assertEquals(Date.valueOf(LocalDate.now().minusDays(1)), dailyCounts.get(0).getDate());
+        // Two posts today
+        assertEquals(2, dailyCounts.get(1).getArticlesAmount());
+        assertEquals(Date.valueOf(LocalDate.now()), dailyCounts.get(1).getDate());
+    }
+
+    @Test
+    void dailyCountsShouldNotIncludeOldDays() {
+        articleRepository.saveAndFlush(new Article(
+            "Last week's article",
+            admin1,
+            "Content of the article. Something about ants going in circles, not being able to stop. Looks cool, but kinda creepy",
+            ZonedDateTime.now().minusDays(7))
+        );
+
+        articleRepository.saveAndFlush(new Article(
+            "First article today",
+            user1,
+            "Contents gonna be content",
+            ZonedDateTime.now())
+        );
+
+        List<DailyArticlesCountRow> dailyCounts = articleRepository.getDailyPostCountsForPastWeek();
+
+        assertEquals(1, dailyCounts.size());
     }
 }
