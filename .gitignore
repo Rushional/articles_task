@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Passwords configuration ###
+src/main/resources/passwords_config.properties
