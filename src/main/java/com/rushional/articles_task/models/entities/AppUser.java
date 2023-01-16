@@ -6,20 +6,21 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@JsonIgnoreProperties({"articlesList", "password", "role", "enabled"})
+@JsonIgnoreProperties({"articlesList", "password", "roles", "enabled"})
 public class AppUser {
 
     public AppUser() {}
 
-    public AppUser(@NotNull String username, String password, String role) {
+    public AppUser(@NotNull String username, String password, Collection<Role> roles) {
         this.username = username;
         this.password = password;
-        this.role = role;
+        this.roles = roles;
         enabled = true;
     }
 
@@ -30,10 +31,16 @@ public class AppUser {
     @NotNull
     private String username;
 
-
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "users_roles",
+        joinColumns = @JoinColumn(
+            name = "user_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(
+            name = "role_id", referencedColumnName = "id"))
+    private Collection<Role> roles;
 
     private String password;
-    private String role;
     private boolean enabled;
 
     @OneToMany(mappedBy = "author")

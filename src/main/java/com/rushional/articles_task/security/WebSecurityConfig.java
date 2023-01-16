@@ -47,6 +47,7 @@ public class WebSecurityConfig {
             .csrf()
             .disable()
             .authorizeHttpRequests((auth) -> auth
+                .requestMatchers("/posts_counts").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .httpBasic(withDefaults());

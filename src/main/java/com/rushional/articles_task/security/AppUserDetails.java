@@ -1,12 +1,13 @@
 package com.rushional.articles_task.security;
 
 import com.rushional.articles_task.models.entities.AppUser;
+import com.rushional.articles_task.models.entities.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 
 public class AppUserDetails implements UserDetails {
     private AppUser user;
@@ -16,9 +17,15 @@ public class AppUserDetails implements UserDetails {
     }
 
     @Override
+//    @Transactional
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole());
-        return Arrays.asList(authority);
+        List<GrantedAuthority> authoritiesList = new ArrayList<>();
+
+        for (Role role : user.getRoles()) {
+            authoritiesList.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+        }
+
+        return authoritiesList;
     }
 
     @Override

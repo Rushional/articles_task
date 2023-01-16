@@ -2,7 +2,9 @@ package com.rushional.articles_task;
 
 import com.rushional.articles_task.models.entities.AppUser;
 import com.rushional.articles_task.models.entities.Article;
+import com.rushional.articles_task.models.entities.Role;
 import com.rushional.articles_task.models.repositories.ArticleRepository;
+import com.rushional.articles_task.models.repositories.RoleRepository;
 import com.rushional.articles_task.models.repositories.UserRepository;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +19,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,27 +48,51 @@ public class RepositoryUnitTest {
     @Autowired
     private UserRepository userRepository;
 
-    private AppUser testUser1 = new AppUser("Just your average user", "Average password", "USER");
-    private AppUser testUser2 = new AppUser("This user has a dark secret", "Dark secret", "ADMIN");
+    @Autowired
+    private RoleRepository roleRepository;
+
+    private Role adminRole = new Role();
+    private Role userRole = new Role();
+    private ArrayList<Role> adminRoles = new ArrayList<>();
+    private ArrayList<Role> userRoles = new ArrayList<>();
+    private AppUser admin1 = new AppUser();
+    private AppUser user1 = new AppUser();
 
     @BeforeEach
     void init(){
-        userRepository.saveAndFlush(testUser1);
-        userRepository.saveAndFlush(testUser2);
+        adminRole.setName("ADMIN");
+        userRole.setName("USER");
+        adminRoles.add(adminRole);
+        userRoles.add(userRole);
+        roleRepository.save(userRole);
+        roleRepository.save(adminRole);
+
+        user1.setUsername("Just your average user");
+//        It says "Average password"
+        user1.setPassword("$2a$08$uGbeTr5L1YMwQDuaN4lWcutgiunyD6kQIp11WBQZutp1O64XOL1my");
+        user1.setRoles(userRoles);
+
+        admin1.setUsername("This user has a dark secret");
+//        It says "Dark secret"
+        admin1.setPassword("$2a$08$pmYxOXfSKLwZprsau.2.Ouhj5uKOmI3eItinaSkWWsNZPMKMfftJK");
+        admin1.setRoles(adminRoles);
+
+        userRepository.saveAndFlush(admin1);
+        userRepository.saveAndFlush(user1);
     }
 
     @Test
     void addingNormalArticles() {
         articleRepository.saveAndFlush(new Article(
             "Just your average article",
-            testUser1,
+            admin1,
             "Content of the article. Something about ants going in circles, not being able to stop. Looks cool, but kinda creepy",
             ZonedDateTime.now())
         );
 
         articleRepository.saveAndFlush(new Article(
             "This title has 100 symbols!BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-            testUser2,
+            user1,
             "With such a cool title I don't really need to actually write an article, I'll get views anyway! Work smarter, not harder!",
             ZonedDateTime.now())
         );
@@ -79,7 +106,7 @@ public class RepositoryUnitTest {
     void savingArticleWithMissingFieldShouldFail() {
         assertThrows(ConstraintViolationException.class, () -> articleRepository.saveAndFlush(new Article(
             "Title",
-            testUser1,
+            admin1,
             null,
             ZonedDateTime.now())
         ));
@@ -93,7 +120,7 @@ public class RepositoryUnitTest {
 
         Article articleWithNoContent = new Article();
         articleWithNoContent.setTitle("Definitely not null");
-        articleWithNoContent.setAuthor(testUser2);
+        articleWithNoContent.setAuthor(user1);
 //        *Not* setting the content
         articleWithNoContent.setPostDate(ZonedDateTime.now());
         assertThrows(ConstraintViolationException.class, () -> articleRepository.saveAndFlush(articleWithNoContent));
@@ -103,7 +130,7 @@ public class RepositoryUnitTest {
     void savingArticleWithLongTitleShouldFail() {
         assertThrows(ConstraintViolationException.class, () -> articleRepository.saveAndFlush(new Article(
             "+This title has 101 symbols!BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-            testUser1,
+            admin1,
             "I sure hope I didn't overdo it with the fancy title!",
             ZonedDateTime.now())
         ));
