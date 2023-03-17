@@ -2,7 +2,9 @@ A secured restful API to create and list articles
 
 # The stack I used
 I used Java 17, Spring Boot, Spring Web, Spring HATEOAS.
+
 Basic authentication — Spring Secutiry. 
+
 Testing — Testcontainers, JUnit 5 and Docker.
 
 I used PgAdmin and Postman to interact with the database directly and make HTTP requests.
