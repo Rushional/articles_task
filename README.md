@@ -1,5 +1,3 @@
-# articles_task
-
 A secured restful API to create and list articles
 
 # The stack I used
@@ -19,18 +17,6 @@ This means that missing fields or titles over 100 characters long do not pass va
 ![image](https://user-images.githubusercontent.com/56831898/212693312-0d47b110-fe23-4baf-865e-e851f8e5321d.png)
 
 ![image](https://user-images.githubusercontent.com/56831898/212693626-167e2fae-d5f9-48ee-9df7-7643720fd163.png)
-
-# Pagination
-
-Default page size is 20 articles:
-
-![image](https://user-images.githubusercontent.com/56831898/212693806-26f50c60-e075-48b9-914e-3f830ba37053.png)
-
-Pagination showcased with the page size reduced to 2:
-Page 1:
-![image](https://user-images.githubusercontent.com/56831898/212694113-a2adef7b-bc1e-497d-bdee-6cdd6e91f485.png)
-Page 2:
-![image](https://user-images.githubusercontent.com/56831898/212694184-e51a255d-4e60-4f0a-b5f8-df62c96aa745.png)
 
 # Statistics endpoint for admins
 Working successfully:
@@ -52,11 +38,12 @@ I made unit tests for my repository queries, to make sure that validation and th
 The tests are run in a Docker container using Testcontainers:
 ![image](https://user-images.githubusercontent.com/56831898/212697875-20fd8822-a469-4df6-a474-4fbc8292c57d.png)
 
-# What I would do if I had more time
+# Pagination
 
-1) Integration tests to test authorization and controllers
-2) Improve validation handling to show exactly what requirement isn't met
-3) An endpoint to post an article now. It wouldn't require a date as an argument. 
-  This wasn't in the requirements of the task, so I didn't do it, but it would have been a good addition to the project.
-3) Similarly, an endpoint for user creation wasn't in the task description. So I assumed they are made outside of the API, and made them manually.
+Default page size is 20 articles:
 
+![image](https://user-images.githubusercontent.com/56831898/212693806-26f50c60-e075-48b9-914e-3f830ba37053.png)
+
+Pagination showcased with the page size reduced to 2:
+Page 1:
+![image](https://user-images.githubusercontent.com/56831898/212694113-a2adef7b-bc1e-497d-bdee-6cdd6e91f485.png)
